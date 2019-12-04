@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Custom Accounting Module',
-    'version': '11.1',
+    'version': '11',
     'category': 'Invoicing',
-    'author': 'Futurenet Technologies',    
+    'author': 'Futurenet Technologies',
+    "images": ['static/description/icon.jpg'],
     'description': """ Customized Accounting module and inherited the following details
     1. Narration column in Payment screen
     2. Internal notes in tree view - Invoice screen
@@ -13,7 +14,11 @@
     6. Cheque payment report
     7. Journal voucher report
        """,
-    'depends': ['base','account'],
+    "license": "Odoo Proprietary License v1.0",
+    "support": "odooteam@futurenet.in",
+    "price": 28.00,
+    "currency": "EUR",
+    'depends': ['base', 'account'],
     'installable': True,
     'auto_install': False,
     'data' : [
@@ -25,7 +30,5 @@
               ],
     'qweb': [
             ],
-    'price': 28,
-    'currency': 'EUR'
 
 }
