@@ -4,8 +4,9 @@
     'version': '11',
     'category': 'Invoicing',
     'author': 'Futurenet Technologies',
-    "images": ['static/description/icon.jpg'],
-    'description': """ Customized Accounting module and inherited the following details
+    "images": ['static/description/icon.png'],
+    'description': """ 
+    Customized Accounting module suitable for Indian accounting requirement and inherited the following details
     1. Narration column in Payment screen
     2. Internal notes in tree view - Invoice screen
     3. Cheque number and cheque date in Payment and Journal entry screen
