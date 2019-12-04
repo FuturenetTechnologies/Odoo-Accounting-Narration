@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="paperformat_due_invoices" model="report.paperformat">
+            <field name="name">European A4 low margin for DC</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">90</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">90</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+                string="Customer/Vendor Due Invoices Report"
+                id="report_due_invoices"
+                model="account.invoice"
+                report_type="qweb-pdf"
+                name="custom_account.report_due_vendor_invoices"
+                file="custom_account.report_due_vendor_invoices"
+                menu="False"
+
+        />
+
+
+        <template id="report_due_vendor_invoices">
+            <t t-call="web.html_container">
+                <t t-call="custom_account.amount_due_layout">
+                    <div class="page">
+                        <!--<div class="oe_structure"/>-->
+                        <table class="table table-condensed table-bordered" border="1" style="width:100%;">
+                            <thead>
+                                <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                    <th width="1%" class="text-center">S.No</th>
+                                    <th class="text-center">
+                                        <strong>Bill Date</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>Number</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        <strong>Vendor Reference</strong>
+                                    </th>
+                                    <th class="text-center">
+                                        Due Date
+                                    </th>
+                                    <th class="text-center">
+                                        Total
+                                    </th>
+                                    <th class="text-center">To Pay</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="partners" t-value="[]"/>
+
+                                <t t-foreach="request.env['account.invoice'].search([('id', '=', data.get('invoices')), ('residual', '!=', 0)])"
+                                   t-as="l">
+
+                                    <t t-set="partners" t-value="partners+[l.partner_id]"/>
+
+                                </t>
+
+                                <t t-foreach="set(partners)" t-as="partner">
+                                    <t t-set="total" t-value="[]"/>
+                                    <t t-set="totals" t-value="[]"/>
+
+                                    <t t-set="counter" t-value="1"/>
+                                    <tr>
+                                        <td colspan="7">
+                                            Vendor:
+                                            <b>
+                                                <span t-esc="partner.name"/>
+                                            </b>
+                                        </td>
+                                    </tr>
+                                    <tr t-foreach="request.env['account.invoice'].search([('id', '=', data.get('invoices')), ('residual', '!=', 0)])"
+                                        t-as="l">
+                                        <t t-if="partner.id==l.partner_id.id">
+                                            <td class="text-left">
+                                                <t t-esc="counter"/>
+                                                <t t-set="counter" t-value="counter+1"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="datetime.datetime.strptime(l.date_invoice, '%Y-%m-%d').strftime('%d-%m-%Y')"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="l.number"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="l.reference"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="datetime.datetime.strptime(l.date_due, '%Y-%m-%d').strftime('%d-%m-%Y')"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="'{0:,.2f}'.format(l.amount_total)"
+                                                      t-field-options="{&quot;widget&quot;: &quot;False&quot;}"/>
+                                                <t t-set="total" t-value="total+[l.amount_total]"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-esc="'{0:,.2f}'.format(l.residual)"
+                                                      t-field-options="{&quot;widget&quot;: &quot;False&quot;}"/>
+                                                <t t-set="totals" t-value="totals+[l.residual]"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right">
+                                            <b>Total</b>
+                                        </td>
+                                        <td class="text-right">
+                                            <b>
+                                                <span t-esc="'{0:,.2f}'.format(sum(total))"
+                                                      t-field-options="{&quot;widget&quot;: &quot;False&quot;}"/>
+                                            </b>
+                                        </td>
+                                        <td class="text-right">
+                                            <b>
+                                                <span t-esc="'{0:,.2f}'.format(sum(totals))"
+                                                      t-field-options="{&quot;widget&quot;: &quot;False&quot;}"/>
+                                            </b>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
