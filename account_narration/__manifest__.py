@@ -25,7 +25,7 @@
               ],
     'qweb': [
             ],
-    'price': 10,
+    'price': 28,
     'currency': 'EUR'
 
 }
