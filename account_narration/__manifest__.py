@@ -14,7 +14,7 @@
     6. Cheque payment report
     7. Journal voucher report
        """,
-    "license": "Odoo Proprietary License v1.0",
+    "license": "OPL-1",
     "support": "odooteam@futurenet.in",
     "price": 28.00,
     "currency": "EUR",
